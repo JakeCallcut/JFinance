@@ -1,10 +1,12 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Calendar;
 import java.util.Scanner;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -17,8 +19,12 @@ import javax.swing.SwingConstants;
 public class Menu extends JFrame implements ActionListener{
 	
 	private static JFrame frame = new JFrame();
+	private static JPanel topPanel = new JPanel();
+	private static JPanel timePanel = new JPanel();
 	private static JPanel panel = new JPanel();
 	private static JLabel title = new JLabel("JFinance");
+	private static JLabel time = new JLabel("00:00:00 UTC");
+	private static JLabel date = new JLabel("0000/00/00");
 	
 	private static JButton interestButton = new JButton("Interest Calculator");
 	private static JButton budgetButton = new JButton("Budget Manager");
@@ -28,18 +34,37 @@ public class Menu extends JFrame implements ActionListener{
 
 	
 	public Menu() {
-		GridLayout grid = new GridLayout(6, 1);
+		GridLayout timeGrid = new GridLayout(2, 1);
+		GridLayout outerGrid = new GridLayout(2, 1);
+		GridLayout grid = new GridLayout(5, 1);
+		GridLayout topGrid = new GridLayout(1, 2);
 
-		panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 20, 30));
-		panel.setLayout(grid);
+		timeGrid.setVgap(0);
 		
-		panel.add(title);
+		frame.setLayout(outerGrid);
+		
+		timePanel.setLayout(timeGrid);
+		panel.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
+		panel.setLayout(grid);
+		panel.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
+		topPanel.setLayout(topGrid);
+		topPanel.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
+		
+		topPanel.add(title);
+		timePanel.add(time);
+		timePanel.add(date);
+		topPanel.add(timePanel);
 		panel.add(interestButton);
 		panel.add(budgetButton);
 		panel.add(currencyButton);
 		panel.add(mortgageButton);
 		panel.add(exitButton);
 		
+		panel.setBackground(Color.blue);
+		topPanel.setBackground(Color.gray);
+		timePanel.setBackground(Color.red);
+		
+		frame.add(topPanel);
 		frame.add(panel);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Financial Toolkit");
@@ -50,6 +75,18 @@ public class Menu extends JFrame implements ActionListener{
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		new Menu();
+		
+        while (true) {
+            Calendar now = Calendar.getInstance();
+            int hours = now.get(Calendar.HOUR_OF_DAY);
+            int minutes = now.get(Calendar.MINUTE);
+            int seconds = now.get(Calendar.SECOND);
+            int year = now.get(Calendar.YEAR);
+            int month = now.get(Calendar.MONTH) + 1;
+            int day = now.get(Calendar.DAY_OF_MONTH);
+            time.setText(hours + ":" + minutes + ":" + seconds + " UTC");
+            date.setText(year + "/" + (month + 1) + "/" + day);
+        }
 	}
 
 	@Override
