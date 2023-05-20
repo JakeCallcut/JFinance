@@ -50,6 +50,12 @@ public class Menu extends JFrame implements ActionListener{
 		topPanel.setLayout(topGrid);
 		topPanel.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
 		
+		exitButton.addActionListener(exitListener);
+		interestButton.addActionListener(interestListener);
+		budgetButton.addActionListener(budgetListener);
+		currencyButton.addActionListener(currencyListener);
+		mortgageButton.addActionListener(mortgageListener);
+		
 		topPanel.add(title);
 		timePanel.add(time);
 		timePanel.add(date);
@@ -72,6 +78,46 @@ public class Menu extends JFrame implements ActionListener{
 		frame.setVisible(true);
 		frame.setResizable(true);
 	}
+	
+	ActionListener exitListener = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.exit(0);
+		}
+	};
+	
+	ActionListener interestListener = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			new InterestCalc();
+		}
+	};
+	
+	ActionListener budgetListener = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.exit(0);
+		}
+	};
+	
+	ActionListener currencyListener = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.exit(0);
+		}
+	};
+	
+	ActionListener mortgageListener = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.exit(0);
+		}
+	};
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		new Menu();
