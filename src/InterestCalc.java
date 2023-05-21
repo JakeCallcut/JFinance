@@ -10,6 +10,8 @@ import java.io.FileNotFoundException;
 import java.time.chrono.HijrahChronology;
 import java.util.Calendar;
 import java.util.Scanner;
+
+import javax.naming.InterruptedNamingException;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -29,6 +31,8 @@ import javax.swing.event.ChangeListener;
 
 public class InterestCalc extends JFrame implements ActionListener {
 
+	public static double rate;
+	
 	private static JFrame frame = new JFrame();
 	private static JPanel topPanel = new JPanel();
 	private static JPanel buttonPanel = new JPanel();	
@@ -47,23 +51,27 @@ public class InterestCalc extends JFrame implements ActionListener {
     private static SpinnerNumberModel model = new SpinnerNumberModel(5, 0, 50, 1);
     private static JSpinner spinner = new JSpinner(model);
     //hr here
+    private static JLabel returnLabel = new JLabel("Return: 0");
+    private static JLabel resultLabel = new JLabel("Final Capital: 0");
     private static JButton calcButton = new JButton("Calculate");
     private static JButton menuButton = new JButton("Back to Menu");
     
     public InterestCalc() {
 		GridLayout outerGrid = new GridLayout(2, 1);
-		GridLayout topGrid = new GridLayout(12, 1);
+		GridLayout topGrid = new GridLayout(14, 1);
 		GridLayout grid = new GridLayout(1, 2);
 		
 		frame.setLayout(outerGrid);
 		topPanel.setLayout(topGrid);
 		buttonPanel.setLayout(grid);
 		
-		//listeners
+		calcButton.addActionListener(calcListener);
+		menuButton.addActionListener(exitListener);
 		slider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 JSlider source = (JSlider) e.getSource();
                 int value = source.getValue();
+                rate = (source.getValue()/1000);
                 rateLabel.setText(Double.toString(value/10.0) + "%");
             }
         });
@@ -72,6 +80,7 @@ public class InterestCalc extends JFrame implements ActionListener {
                 return false;
             }
         });
+		
 		simpleButton.setSelected(true);
 		
 		group.add(simpleButton);
@@ -88,6 +97,8 @@ public class InterestCalc extends JFrame implements ActionListener {
 		topPanel.add(rateLabel);
 		topPanel.add(yearsLabel);
 		topPanel.add(spinner);
+		topPanel.add(returnLabel);
+		topPanel.add(resultLabel);
 		
 		buttonPanel.add(calcButton);
 		buttonPanel.add(menuButton);
@@ -101,6 +112,45 @@ public class InterestCalc extends JFrame implements ActionListener {
 		frame.setResizable(true);
 		
     }
+    
+	ActionListener calcListener = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			boolean isSimple;
+				if (simpleButton.isSelected()) {
+					isSimple = true;
+				}
+				else {
+					isSimple = false;
+				}
+			
+			double initial = Double.valueOf(capitalField.getText());
+			double noofYears = Double.valueOf((String) spinner.getValue()); 
+			double result = 0;
+			double myreturn = 0;
+			
+			if (isSimple) {
+				myreturn = initial * noofYears * rate;
+				result = initial + myreturn;
+			}
+			else {
+				myreturn = initial * Math.pow(rate, noofYears);
+				result = initial + myreturn;
+			}
+			
+			returnLabel.setText("Return: " + myreturn);
+			resultLabel.setText("Final Capital: " + result);
+		}
+	};
+	
+	ActionListener exitListener = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			dispose();
+		}
+	};
     
 	@Override
 	public void actionPerformed(ActionEvent e) {
