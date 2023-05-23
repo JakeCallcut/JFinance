@@ -66,9 +66,6 @@ public class Menu extends JFrame implements ActionListener{
 		panel.add(mortgageButton);
 		panel.add(exitButton);
 		
-		panel.setBackground(Color.blue);
-		topPanel.setBackground(Color.gray);
-		timePanel.setBackground(Color.red);
 		
 		frame.add(topPanel);
 		frame.add(panel);

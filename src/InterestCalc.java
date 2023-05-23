@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -7,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.ColorConvertOp;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.ParseException;
 import java.time.chrono.HijrahChronology;
 import java.util.Calendar;
 import java.util.Scanner;
@@ -70,8 +72,8 @@ public class InterestCalc extends JFrame implements ActionListener {
 		slider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 JSlider source = (JSlider) e.getSource();
-                int value = source.getValue();
-                rate = (source.getValue()/1000);
+                double value = source.getValue();
+                rate = (value/1000);
                 rateLabel.setText(Double.toString(value/10.0) + "%");
             }
         });
@@ -86,6 +88,8 @@ public class InterestCalc extends JFrame implements ActionListener {
 		group.add(simpleButton);
 		group.add(complexButton);
 		
+		frame.setPreferredSize(new Dimension(250, 500));
+		
 		topPanel.add(title);
 		topPanel.add(simpleButton);
 		topPanel.add(complexButton);
@@ -99,6 +103,9 @@ public class InterestCalc extends JFrame implements ActionListener {
 		topPanel.add(spinner);
 		topPanel.add(returnLabel);
 		topPanel.add(resultLabel);
+		
+		calcButton.setPreferredSize(new Dimension(50, 35));
+		menuButton.setPreferredSize(new Dimension(40, 30));
 		
 		buttonPanel.add(calcButton);
 		buttonPanel.add(menuButton);
@@ -117,6 +124,12 @@ public class InterestCalc extends JFrame implements ActionListener {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			try {
+				spinner.commitEdit();
+			} catch (ParseException e1) {
+				e1.printStackTrace();
+				System.out.println("spinner error");
+			}
 			boolean isSimple;
 				if (simpleButton.isSelected()) {
 					isSimple = true;
@@ -126,19 +139,19 @@ public class InterestCalc extends JFrame implements ActionListener {
 				}
 			
 			double initial = Double.valueOf(capitalField.getText());
-			double noofYears = Double.valueOf((String) spinner.getValue()); 
-			double result = 0;
-			double myreturn = 0;
+			double noofYears = (Integer) spinner.getValue(); 
+			double result = 0.0;
+			double myreturn = 0.0;
 			
 			if (isSimple) {
 				myreturn = initial * noofYears * rate;
 				result = initial + myreturn;
 			}
 			else {
-				myreturn = initial * Math.pow(rate, noofYears);
+				myreturn = initial * Math.pow(1 + rate, noofYears) - initial;
 				result = initial + myreturn;
 			}
-			
+
 			returnLabel.setText("Return: " + myreturn);
 			resultLabel.setText("Final Capital: " + result);
 		}
