@@ -1,29 +1,33 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Calendar;
-import java.util.Scanner;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+//import org.json.JSONObject; //last edit trying to make location work
+
 
 public class Menu extends JFrame implements ActionListener{
 	
 	private static JFrame frame = new JFrame();
 	private static JPanel topPanel = new JPanel();
-	private static JPanel timePanel = new JPanel();
 	private static JPanel panel = new JPanel();
 	private static JLabel title = new JLabel("JFinance");
 	private static JLabel time = new JLabel("00:00:00 UTC");
+	private static JLabel time2 = new JLabel("00:00:00 UTC");
 	private static JLabel date = new JLabel("0000/00/00");
 	
 	private static JButton interestButton = new JButton("Interest Calculator");
@@ -34,38 +38,40 @@ public class Menu extends JFrame implements ActionListener{
 
 	
 	public Menu() {
-		GridLayout timeGrid = new GridLayout(2, 1);
+		
 		GridLayout outerGrid = new GridLayout(2, 1);
 		GridLayout grid = new GridLayout(5, 1);
-		GridLayout topGrid = new GridLayout(1, 2);
-
-		timeGrid.setVgap(0);
+		GridLayout topGrid = new GridLayout(4, 1);
 		
 		frame.setLayout(outerGrid);
+	
+		topPanel.setBackground(Color.darkGray);
+		panel.setBackground(Color.gray);
+		title.setForeground(Color.orange);
+		title.setFont(new Font(title.getFont().getName(), Font.PLAIN, 24));
+		time.setForeground(Color.white);
+		date.setForeground(Color.white);
 		
-		timePanel.setLayout(timeGrid);
-		panel.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
+		panel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 		panel.setLayout(grid);
-		panel.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
 		topPanel.setLayout(topGrid);
-		topPanel.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
+		topPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 		
 		exitButton.addActionListener(exitListener);
 		interestButton.addActionListener(interestListener);
 		budgetButton.addActionListener(budgetListener);
 		currencyButton.addActionListener(currencyListener);
 		mortgageButton.addActionListener(mortgageListener);
-		
+			
 		topPanel.add(title);
-		timePanel.add(time);
-		timePanel.add(date);
-		topPanel.add(timePanel);
+		topPanel.add(time);
+		topPanel.add(time2);
+		topPanel.add(date);
 		panel.add(interestButton);
 		panel.add(budgetButton);
 		panel.add(currencyButton);
 		panel.add(mortgageButton);
 		panel.add(exitButton);
-		
 		
 		frame.add(topPanel);
 		frame.add(panel);
@@ -118,6 +124,36 @@ public class Menu extends JFrame implements ActionListener{
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		new Menu();
+		
+		 try {
+	            String url = "http://ip-api.com/json/";
+
+	            // Open a connection to the IP-API endpoint
+	            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+	            connection.setRequestMethod("GET");
+
+	            // Get the response code
+	            int responseCode = connection.getResponseCode();
+
+	            if (responseCode == HttpURLConnection.HTTP_OK) {
+	                // Read the response
+	                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	                String line;
+	                StringBuilder response = new StringBuilder();
+	                while ((line = reader.readLine()) != null) {
+	                    response.append(line);
+	                }
+	                reader.close();
+
+	                System.out.println(response.toString());
+	            } else {
+	                System.out.println("Error: " + responseCode);
+	            }
+
+	            connection.disconnect();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
 		
         while (true) {
             Calendar now = Calendar.getInstance();

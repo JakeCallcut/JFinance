@@ -42,7 +42,7 @@ public class InterestCalc extends JFrame implements ActionListener {
 	private static JLabel title = new JLabel("Interest Calculator");
     private static ButtonGroup group = new ButtonGroup();
     private static JRadioButton simpleButton = new JRadioButton("Simple Interest");
-    private static JRadioButton complexButton = new JRadioButton("Complex Interest");	
+    private static JRadioButton complexButton = new JRadioButton("Compound Interest");	
     private static JSeparator hr = new JSeparator(SwingConstants.HORIZONTAL);
     private static JLabel initiaLabel = new JLabel("Initial Capital");
     private static JTextField capitalField = new JTextField(100);
@@ -52,7 +52,7 @@ public class InterestCalc extends JFrame implements ActionListener {
     private static JLabel yearsLabel = new JLabel("Number of years invested");
     private static SpinnerNumberModel model = new SpinnerNumberModel(5, 0, 50, 1);
     private static JSpinner spinner = new JSpinner(model);
-    //hr here
+    private static JSeparator hr2 = new JSeparator(SwingConstants.HORIZONTAL);
     private static JLabel returnLabel = new JLabel("Return: 0");
     private static JLabel resultLabel = new JLabel("Final Capital: 0");
     private static JButton calcButton = new JButton("Calculate");
@@ -101,6 +101,7 @@ public class InterestCalc extends JFrame implements ActionListener {
 		topPanel.add(rateLabel);
 		topPanel.add(yearsLabel);
 		topPanel.add(spinner);
+		topPanel.add(hr2);
 		topPanel.add(returnLabel);
 		topPanel.add(resultLabel);
 		
@@ -130,13 +131,24 @@ public class InterestCalc extends JFrame implements ActionListener {
 				e1.printStackTrace();
 				System.out.println("spinner error");
 			}
+			
 			boolean isSimple;
-				if (simpleButton.isSelected()) {
-					isSimple = true;
-				}
-				else {
-					isSimple = false;
-				}
+				
+			if (simpleButton.isSelected()) {
+					
+				isSimple = true;
+				
+			}
+				
+			else {
+				isSimple = false;			
+			}
+			
+			try {
+				double initial = Double.valueOf(capitalField.getText());				
+			} catch (NumberFormatException e2) {
+				title.setText("Please enter a ");
+			}
 			
 			double initial = Double.valueOf(capitalField.getText());
 			double noofYears = (Integer) spinner.getValue(); 
