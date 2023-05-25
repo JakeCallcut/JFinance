@@ -1,9 +1,10 @@
-import java.awt.BorderLayout;
+import java.awt.BoranderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.ColorConvertOp;
@@ -32,11 +33,16 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import apple.laf.JRSUIState.TitleBarHeightState;
+
 public class InterestCalc extends JFrame implements ActionListener {
+
+	private static final long serialVersionUID = 1L;
 
 	public static double rate;
 	
 	private static JFrame frame = new JFrame();
+	private static JPanel outPanel = new JPanel();
 	private static JPanel topPanel = new JPanel();
 	private static JPanel buttonPanel = new JPanel();	
 	
@@ -59,14 +65,12 @@ public class InterestCalc extends JFrame implements ActionListener {
     private static JButton calcButton = new JButton("Calculate");
     private static JButton menuButton = new JButton("Back to Menu");
     
-	title.setFont(new Font(title.getFont().getName(), Font.PLAIN, 24));
-    
     public InterestCalc() {
-		GridLayout outerGrid = new GridLayout(2, 1);
+		FlowLayout outerGrid = new FlowLayout();
 		GridLayout topGrid = new GridLayout(14, 1);
-		GridLayout grid = new GridLayout(1, 2);
+		FlowLayout grid = new FlowLayout();
 		
-		frame.setLayout(outerGrid);
+		outPanel.setLayout(outerGrid);
 		topPanel.setLayout(topGrid);
 		buttonPanel.setLayout(grid);
 		
@@ -87,11 +91,28 @@ public class InterestCalc extends JFrame implements ActionListener {
         });
 		
 		simpleButton.setSelected(true);
+		topPanel.setBackground(Color.darkGray);
+		buttonPanel.setBackground(Color.darkGray);
+		title.setForeground(Color.orange);
+		title.setFont(new Font(title.getFont().getName(), Font.PLAIN, 24));
+		simpleButton.setForeground(Color.white);
+		complexButton.setForeground(Color.white);
+		hr.setForeground(Color.white);
+		initiaLabel.setForeground(Color.white);
+		capitalField.setBackground(Color.gray);
+		capitalField.setForeground(Color.white);
+		interestLabel.setForeground(Color.white);
+		slider.setForeground(Color.white);
+		rateLabel.setForeground(Color.white);
+		yearsLabel.setForeground(Color.white);
+		spinner.setBackground(Color.gray);
+		spinner.setForeground(Color.gray);
+		hr2.setForeground(Color.white);
+		returnLabel.setForeground(Color.orange);
+		resultLabel.setForeground(Color.orange);
 		
 		group.add(simpleButton);
 		group.add(complexButton);
-		
-		frame.setPreferredSize(new Dimension(250, 500));
 		
 		topPanel.add(title);
 		topPanel.add(simpleButton);
@@ -108,15 +129,17 @@ public class InterestCalc extends JFrame implements ActionListener {
 		topPanel.add(returnLabel);
 		topPanel.add(resultLabel);
 		
-		calcButton.setPreferredSize(new Dimension(50, 35));
-		menuButton.setPreferredSize(new Dimension(40, 30));
+		outPanel.setBackground(Color.darkGray);
+		topPanel.setPreferredSize(new Dimension(300, 450));
+		calcButton.setPreferredSize(new Dimension(150, 75));
+		menuButton.setPreferredSize(new Dimension(100, 60));
 		
 		buttonPanel.add(calcButton);
 		buttonPanel.add(menuButton);
-		
-		frame.add(topPanel);
-		frame.add(buttonPanel);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		outPanel.add(topPanel);
+		outPanel.add(buttonPanel);
+		frame.add(outPanel);
+		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
 		frame.setTitle("JFinance");
 		frame.pack();
 		frame.setVisible(true);

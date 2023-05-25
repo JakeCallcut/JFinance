@@ -22,6 +22,8 @@ import org.json.JSONObject;
 
 public class Menu extends JFrame implements ActionListener{
 	
+	private static final long serialVersionUID = 1L;
+	
 	private static JFrame frame = new JFrame();
 	private static JPanel topPanel = new JPanel();
 	private static JPanel panel = new JPanel();
