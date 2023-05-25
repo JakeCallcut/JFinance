@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -57,6 +58,8 @@ public class InterestCalc extends JFrame implements ActionListener {
     private static JLabel resultLabel = new JLabel("Final Capital: 0");
     private static JButton calcButton = new JButton("Calculate");
     private static JButton menuButton = new JButton("Back to Menu");
+    
+	title.setFont(new Font(title.getFont().getName(), Font.PLAIN, 24));
     
     public InterestCalc() {
 		GridLayout outerGrid = new GridLayout(2, 1);

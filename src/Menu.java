@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-//import org.json.JSONObject; //last edit trying to make location work
+import org.json.JSONObject;
 
 
 public class Menu extends JFrame implements ActionListener{
@@ -27,7 +27,7 @@ public class Menu extends JFrame implements ActionListener{
 	private static JPanel panel = new JPanel();
 	private static JLabel title = new JLabel("JFinance");
 	private static JLabel time = new JLabel("00:00:00 UTC");
-	private static JLabel time2 = new JLabel("00:00:00 UTC");
+	private static JLabel location = new JLabel("Location Not Found");
 	private static JLabel date = new JLabel("0000/00/00");
 	
 	private static JButton interestButton = new JButton("Interest Calculator");
@@ -46,11 +46,12 @@ public class Menu extends JFrame implements ActionListener{
 		frame.setLayout(outerGrid);
 	
 		topPanel.setBackground(Color.darkGray);
-		panel.setBackground(Color.gray);
+		panel.setBackground(Color.darkGray);
 		title.setForeground(Color.orange);
 		title.setFont(new Font(title.getFont().getName(), Font.PLAIN, 24));
 		time.setForeground(Color.white);
 		date.setForeground(Color.white);
+		location.setForeground(Color.white);
 		
 		panel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 		panel.setLayout(grid);
@@ -65,8 +66,8 @@ public class Menu extends JFrame implements ActionListener{
 			
 		topPanel.add(title);
 		topPanel.add(time);
-		topPanel.add(time2);
 		topPanel.add(date);
+		topPanel.add(location);
 		panel.add(interestButton);
 		panel.add(budgetButton);
 		panel.add(currencyButton);
@@ -145,7 +146,10 @@ public class Menu extends JFrame implements ActionListener{
 	                }
 	                reader.close();
 
-	                System.out.println(response.toString());
+	                JSONObject jsonResponse = new JSONObject(response.toString());
+	                location.setText(jsonResponse.getString("city") + ", " + jsonResponse.getString("country"));
+	                System.out.println(response);
+	                
 	            } else {
 	                System.out.println("Error: " + responseCode);
 	            }
