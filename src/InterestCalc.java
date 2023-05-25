@@ -1,25 +1,13 @@
-import java.awt.BoranderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.ColorConvertOp;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.text.ParseException;
-import java.time.chrono.HijrahChronology;
-import java.util.Calendar;
-import java.util.Scanner;
-
-import javax.naming.InterruptedNamingException;
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,8 +20,6 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import apple.laf.JRSUIState.TitleBarHeightState;
 
 public class InterestCalc extends JFrame implements ActionListener {
 
@@ -130,6 +116,7 @@ public class InterestCalc extends JFrame implements ActionListener {
 		topPanel.add(resultLabel);
 		
 		outPanel.setBackground(Color.darkGray);
+		frame.setPreferredSize(new Dimension(350, 600));
 		topPanel.setPreferredSize(new Dimension(300, 450));
 		calcButton.setPreferredSize(new Dimension(150, 75));
 		menuButton.setPreferredSize(new Dimension(100, 60));
