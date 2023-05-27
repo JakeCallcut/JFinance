@@ -18,4 +18,6 @@ Jfinance is a compact financial toolkit for convenient desktop use designed for 
  - Windows functionality
  - invoice generator
  
-### 
+### APIs and tools used
+ - <a href="https://ip-api.com">IP-API</a> used for location tracking on main menu
+ - Java Swing used for easier GUI creation
