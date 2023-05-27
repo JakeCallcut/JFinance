@@ -51,6 +51,22 @@ public class BudgetManager extends JFrame implements ActionListener{
 		leftPanel.setLayout(leftLayout);
 		rightPanel.setLayout(rightLayout);
 		
+		outPanel.setPreferredSize(new Dimension(600, 400));
+		textArea.setPreferredSize(new Dimension(300, 400));
+		outPanel.setBackground(Color.darkGray);
+		leftPanel.setBackground(Color.darkGray);
+		rightPanel.setBackground(Color.darkGray);
+		title.setFont(new Font(title.getFont().getName(), Font.PLAIN, 24));
+		title.setForeground(Color.orange);
+		textArea.setBackground(Color.gray);
+		textArea.setForeground(Color.white);
+		itemName.setBackground(Color.gray);
+		itemName.setForeground(Color.white);
+		itemPrice.setBackground(Color.gray);
+		itemPrice.setForeground(Color.white);
+		itemNameLabel.setForeground(Color.white);
+		itemPriceLabel.setForeground(Color.white);
+		
 		leftPanel.add(title);
 		leftPanel.add(textArea);
 		rightPanel.add(itemNameLabel);
@@ -69,6 +85,23 @@ public class BudgetManager extends JFrame implements ActionListener{
 		frame.setVisible(true);
 		frame.setResizable(true);
 	}
+	
+	
+	ActionListener exitListener = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			dispose();
+		}
+	};
+	
+	ActionListener addListener = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+		}
+	};
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
