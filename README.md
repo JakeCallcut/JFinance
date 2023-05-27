@@ -1,12 +1,21 @@
+<p align="center">
+	<img src="https://img.shields.io/badge/Framework-Swing-ff69b4"  style="margin-right:-5px">
+    <img src="https://img.shields.io/badge/Language-Java-orange"  style="margin-right:-5px"><br>
+    </p>
+
 # 📈JFinance
 Jfinance is a compact financial toolkit for convenient desktop use designed for the everyday person to manage budgets and conduct financial calculations
 
 ## Features
- - Clean and user-friendly interface for managing your accounts and passwords
- - 
- - 
- - A quick and easy way to export and share passwords and accounts
+ - Clean and user-friendly interface for managing your finances
+ - An interest calculator for simple and compound interest
+ - A budget manager to help you calculate overhead and costs
+ - A currency converter with the latest rates on majro currency pairs
+ - A simple mortgage calculator 
  - Open source and transparent client designed for MacOS
  
-## Upcoming
+### Upcoming
  - Windows functionality
+ - invoice generator
+ 
+### 
