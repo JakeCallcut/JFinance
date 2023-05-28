@@ -7,30 +7,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
-import java.security.PublicKey;
-import java.security.KeyStore.PrivateKeyEntry;
-import java.text.ParseException;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JSeparator;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.text.NumberFormatter;
 
 public class BudgetManager extends JFrame implements ActionListener{
 
 	public static double budget = 0;
+	public static double budgetLeft = 0;
+	private static NumberFormatter formatter = new NumberFormatter();
 	
 	private static JFrame frame = new JFrame();
 	private static JPanel outPanel = new JPanel();
@@ -44,12 +34,15 @@ public class BudgetManager extends JFrame implements ActionListener{
 	private static JLabel itemPriceLabel = new JLabel("Item Price:");
 	private static JTextField itemPrice = new JTextField();
 	
+	
 	private static JButton addButton = new JButton("Add Item");
 	private static JButton exitButton = new JButton("Back to Menu");
 	
 	private static JLabel padding = new JLabel();
-	private static JTextField budgetField = new JTextField("Enter Budget");
+	private static JTextField budgetField = new JTextField();
 	private static JButton setBudget = new JButton("Set Budget");
+	
+	private static JLabel remaining = new JLabel("Budget Remaining: " + Double.toString(budgetLeft));
 	
 	public BudgetManager() {
 		GridLayout outer = new GridLayout(1, 2);
@@ -85,10 +78,16 @@ public class BudgetManager extends JFrame implements ActionListener{
 		itemPriceLabel.setFont(new Font(title.getFont().getName(), Font.PLAIN, 16));
 		budgetField.setBackground(Color.gray);
 		budgetField.setForeground(Color.white);
-		budgetField.addFocusListener(focusListener);
+		remaining.setFont(new Font(title.getFont().getName(), Font.PLAIN, 16));
+		remaining.setForeground(Color.orange);
 		
 		padding.setPreferredSize(new Dimension(0, 100));
 		budgetField.setPreferredSize(new Dimension(100, 20));
+		
+		budgetField.addFocusListener(focusListener);
+		exitButton.addActionListener(exitListener);
+		addButton.addActionListener(addListener);
+		setBudget.addActionListener(setListener);
 		
 		leftPanel.add(title);
 		leftPanel.add(textArea);
@@ -101,6 +100,7 @@ public class BudgetManager extends JFrame implements ActionListener{
 		rightPanel.add(budgetField);
 		rightPanel.add(padding);
 		rightPanel.add(setBudget);
+		rightPanel.add(remaining);
 		
 		outPanel.add(leftPanel);
 		outPanel.add(rightPanel);
@@ -138,12 +138,43 @@ public class BudgetManager extends JFrame implements ActionListener{
 	};
 	
 	ActionListener addListener = new ActionListener() {
-		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+			try {
+				double price = Double.parseDouble(itemPrice.getText());
+				String name = itemName.getText();
+				
+				textArea.setText(textArea.getText() + "\n" + name + " : " + price);
+				
+				budgetLeft -= price;
+				UpdateBudget();				
+			} catch (Exception e2) {
+				System.out.println("invalid price entry");
+				itemName.setText("");
+				itemPrice.setText(getName());
+			}
 		}
 	};
+	
+	ActionListener setListener = new ActionListener() {	
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {				
+				budget = Double.parseDouble(budgetField.getText());
+				budgetLeft = budget;
+				UpdateBudget();
+				setBudget.setVisible(false);
+				budgetField.setVisible(false);
+			} catch (Exception e2) {
+				System.out.println("invalid budget entry");
+				budgetField.setText("");
+			}
+		}
+	};
+	
+	public void UpdateBudget() {
+		remaining.setText("Budget Remaining: " + budgetLeft);
+	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
