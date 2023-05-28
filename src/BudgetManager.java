@@ -14,13 +14,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.NumberFormatter;
 
 public class BudgetManager extends JFrame implements ActionListener{
 
 	public static double budget = 0;
 	public static double budgetLeft = 0;
-	private static NumberFormatter formatter = new NumberFormatter();
 	
 	private static JFrame frame = new JFrame();
 	private static JPanel outPanel = new JPanel();
@@ -37,12 +35,12 @@ public class BudgetManager extends JFrame implements ActionListener{
 	
 	private static JButton addButton = new JButton("Add Item");
 	private static JButton exitButton = new JButton("Back to Menu");
-	
-	private static JLabel padding = new JLabel();
+
 	private static JTextField budgetField = new JTextField();
 	private static JButton setBudget = new JButton("Set Budget");
 	
 	private static JLabel remaining = new JLabel("Budget Remaining: " + Double.toString(budgetLeft));
+	private static JLabel budgetLabel = new JLabel("Principal Budget: " + Double.toString(budget));
 	
 	public BudgetManager() {
 		GridLayout outer = new GridLayout(1, 2);
@@ -78,10 +76,11 @@ public class BudgetManager extends JFrame implements ActionListener{
 		itemPriceLabel.setFont(new Font(title.getFont().getName(), Font.PLAIN, 16));
 		budgetField.setBackground(Color.gray);
 		budgetField.setForeground(Color.white);
+		budgetLabel.setFont(new Font(title.getFont().getName(), Font.PLAIN, 16));
+		budgetLabel.setForeground(Color.orange);
 		remaining.setFont(new Font(title.getFont().getName(), Font.PLAIN, 16));
 		remaining.setForeground(Color.orange);
 		
-		padding.setPreferredSize(new Dimension(0, 100));
 		budgetField.setPreferredSize(new Dimension(100, 20));
 		
 		budgetField.addFocusListener(focusListener);
@@ -98,8 +97,8 @@ public class BudgetManager extends JFrame implements ActionListener{
 		rightPanel.add(addButton);
 		rightPanel.add(exitButton);
 		rightPanel.add(budgetField);
-		rightPanel.add(padding);
 		rightPanel.add(setBudget);
+		rightPanel.add(budgetLabel);
 		rightPanel.add(remaining);
 		
 		outPanel.add(leftPanel);
@@ -174,6 +173,7 @@ public class BudgetManager extends JFrame implements ActionListener{
 	
 	public void UpdateBudget() {
 		remaining.setText("Budget Remaining: " + budgetLeft);
+		budgetLabel.setText("Principal Budget: " + budget);
 	}
 	
 	@Override
