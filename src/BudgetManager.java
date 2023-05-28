@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.security.PublicKey;
 import java.security.KeyStore.PrivateKeyEntry;
@@ -22,11 +24,14 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class BudgetManager extends JFrame implements ActionListener{
 
+	public static double budget = 0;
+	
 	private static JFrame frame = new JFrame();
 	private static JPanel outPanel = new JPanel();
 	private static JPanel leftPanel = new JPanel();
@@ -42,17 +47,27 @@ public class BudgetManager extends JFrame implements ActionListener{
 	private static JButton addButton = new JButton("Add Item");
 	private static JButton exitButton = new JButton("Back to Menu");
 	
+	private static JLabel padding = new JLabel();
+	private static JTextField budgetField = new JTextField("Enter Budget");
+	private static JButton setBudget = new JButton("Set Budget");
+	
 	public BudgetManager() {
 		GridLayout outer = new GridLayout(1, 2);
 		FlowLayout leftLayout = new FlowLayout();
-		GridLayout rightLayout = new GridLayout(6, 1);
+		FlowLayout rightLayout = new FlowLayout();
 		
 		outPanel.setLayout(outer);
 		leftPanel.setLayout(leftLayout);
 		rightPanel.setLayout(rightLayout);
+		rightPanel.setBorder(new EmptyBorder(30, 0, 0, 0));
 		
-		outPanel.setPreferredSize(new Dimension(600, 400));
+		textArea.setEditable(false);
+		outPanel.setPreferredSize(new Dimension(660, 460));
 		textArea.setPreferredSize(new Dimension(300, 400));
+		addButton.setPreferredSize(new Dimension(250, 50));
+		exitButton.setPreferredSize(new Dimension(250, 50));
+		itemName.setPreferredSize(new Dimension(250, 50));
+		itemPrice.setPreferredSize(new Dimension(250, 50));
 		outPanel.setBackground(Color.darkGray);
 		leftPanel.setBackground(Color.darkGray);
 		rightPanel.setBackground(Color.darkGray);
@@ -65,7 +80,15 @@ public class BudgetManager extends JFrame implements ActionListener{
 		itemPrice.setBackground(Color.gray);
 		itemPrice.setForeground(Color.white);
 		itemNameLabel.setForeground(Color.white);
+		itemNameLabel.setFont(new Font(title.getFont().getName(), Font.PLAIN, 16));
 		itemPriceLabel.setForeground(Color.white);
+		itemPriceLabel.setFont(new Font(title.getFont().getName(), Font.PLAIN, 16));
+		budgetField.setBackground(Color.gray);
+		budgetField.setForeground(Color.white);
+		budgetField.addFocusListener(focusListener);
+		
+		padding.setPreferredSize(new Dimension(0, 100));
+		budgetField.setPreferredSize(new Dimension(100, 20));
 		
 		leftPanel.add(title);
 		leftPanel.add(textArea);
@@ -75,6 +98,9 @@ public class BudgetManager extends JFrame implements ActionListener{
 		rightPanel.add(itemPrice);
 		rightPanel.add(addButton);
 		rightPanel.add(exitButton);
+		rightPanel.add(budgetField);
+		rightPanel.add(padding);
+		rightPanel.add(setBudget);
 		
 		outPanel.add(leftPanel);
 		outPanel.add(rightPanel);
@@ -86,6 +112,22 @@ public class BudgetManager extends JFrame implements ActionListener{
 		frame.setResizable(true);
 	}
 	
+	FocusListener focusListener = new FocusListener() {
+		
+		@Override
+		public void focusLost(FocusEvent e) {
+            if (budgetField.getText().equals("")) {
+                budgetField.setText("Enter Budget");
+            }
+		}
+		
+		@Override
+		public void focusGained(FocusEvent e) {
+            if (budgetField.getText().equals("Enter Budget")) {
+                budgetField.setText("");
+            }
+		}
+	};
 	
 	ActionListener exitListener = new ActionListener() {
 		
