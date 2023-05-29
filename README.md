@@ -21,4 +21,5 @@ Jfinance is a compact financial toolkit for convenient desktop use designed for 
 ### APIs and tools used
  - <a href="https://ip-api.com">IP-API</a> used for location tracking on main menu
  - <a href="https://github.com/stleary/JSON-java">JSON in Java</a> used for easier manipulation of JSON
+ - <a href="https://app.exchangerate-api.com/">ExhangeRate-API</a> used for currency conversion
  - Java Swing used for easier GUI creation
