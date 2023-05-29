@@ -113,7 +113,7 @@ public class Menu extends JFrame implements ActionListener{
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.exit(0);
+			new CurrencyConverter();
 		}
 	};
 	
