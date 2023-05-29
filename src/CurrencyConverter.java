@@ -1,20 +1,31 @@
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.nio.channels.NonReadableChannelException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.MessageFormat;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTextField;
+
+import org.json.JSONObject;
 
 public class CurrencyConverter extends JFrame implements ActionListener{
 
+	private static final long serialVersionUID = 1L;
 	private double beforeAmt;
 	private double afterAmt;
 	private double rate;
@@ -47,6 +58,29 @@ public class CurrencyConverter extends JFrame implements ActionListener{
 		topPanel.setLayout(topGrid);
 		bottomPanel.setLayout(bottomLayout);
 		
+		//preferences
+		frame.setPreferredSize(new Dimension(360, 300));
+		outPanel.setBackground(Color.darkGray);
+		topPanel.setBackground(Color.darkGray);
+		bottomPanel.setBackground(Color.darkGray);
+		title.setFont(new Font(title.getFont().getName(), Font.PLAIN, 24));
+		title.setForeground(Color.orange);
+		fromLabel.setForeground(Color.white);
+		fromLabel.setFont(new Font(title.getFont().getName(), Font.PLAIN, 16));
+		toLabel.setForeground(Color.white);
+		toLabel.setFont(new Font(title.getFont().getName(), Font.PLAIN, 16));
+		amountLabel.setForeground(Color.white);
+		resultLabel.setForeground(Color.orange);
+		resultLabel.setFont(new Font(title.getFont().getName(), Font.PLAIN, 16));
+		updateLabel.setForeground(Color.orange);
+		updateLabel.setFont(new Font(title.getFont().getName(), Font.PLAIN, 16));
+		amountField.setBackground(Color.gray);
+		amountField.setForeground(Color.white);
+		amountField.setPreferredSize(new Dimension(100, 20));
+		
+		//listeners
+		convertButton.addActionListener(convertListener);
+		
 		//adding to frame
 		outPanel.add(title);
 		topPanel.add(fromLabel);
@@ -67,8 +101,68 @@ public class CurrencyConverter extends JFrame implements ActionListener{
 		frame.setTitle("JFinance");
 		frame.pack();
 		frame.setVisible(true);
-		frame.setResizable(true);
+		frame.setResizable(false);
 	}
+	
+	ActionListener convertListener = new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+				String baseCurrency = (String)fromBox.getSelectedItem();
+				String targetCurrency = (String)toBox.getSelectedItem();
+				double baseAmount = Double.parseDouble(amountField.getText());
+				double targetAmount;
+			
+				
+				URL url = new URL("https://v6.exchangerate-api.com/v6/e0cbabd4d96860dcf76e979b/latest/" + baseCurrency);
+				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+				
+				connection.setRequestMethod("GET");
+				int responseCode = connection.getResponseCode();
+				
+	            if (responseCode == HttpURLConnection.HTTP_OK) {
+	                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	                StringBuilder response = new StringBuilder();
+	                String line;
+
+	                while ((line = reader.readLine()) != null) {
+	                	response.append(line);
+	                }
+	                reader.close();
+
+	                System.out.println(response);
+	                JSONObject json = new JSONObject(response.toString());
+	                String check = (String)json.get("time_last_update_utc");
+	                check = check.substring(0, check.length() - 6);
+	                JSONObject rates = json.getJSONObject("conversion_rates");
+	                double exchangeRate = rates.getDouble(targetCurrency);
+	                System.out.println("Exchange rate: 1 " + baseCurrency + " = " + exchangeRate + " " + targetCurrency);
+	                
+	                targetAmount = baseAmount * exchangeRate;
+	                
+	                resultLabel.setText(MessageFormat.format("{0} {1} = {2} {3}", baseAmount, baseCurrency, targetAmount, targetCurrency));
+	                updateLabel.setText("Last checked: " + check);
+
+	            } else {
+	                System.out.println("HTTP request failed with response code: " + responseCode);
+	            }
+
+	            connection.disconnect();
+				
+			} catch (MalformedURLException e1) {
+				System.out.println("Invalid URL");
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				System.out.println("Cannot establish connection");
+				e1.printStackTrace();
+			} catch (NumberFormatException e1) {
+				amountField.setText("");
+			}
+			
+			
+		}
+	};
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

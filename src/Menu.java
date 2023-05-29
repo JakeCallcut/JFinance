@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -18,6 +19,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import org.json.JSONObject;
+import org.w3c.dom.css.CSSPrimitiveValue;
+import org.w3c.dom.css.RGBColor;
 
 
 public class Menu extends JFrame implements ActionListener{
@@ -28,6 +31,7 @@ public class Menu extends JFrame implements ActionListener{
 	private static JPanel topPanel = new JPanel();
 	private static JPanel panel = new JPanel();
 	private static JLabel title = new JLabel("JFinance");
+	private static JLabel menuLabel = new JLabel("Main Menu");
 	private static JLabel time = new JLabel("00:00:00 UTC");
 	private static JLabel location = new JLabel("Location Not Found");
 	private static JLabel date = new JLabel("0000/00/00");
@@ -41,32 +45,40 @@ public class Menu extends JFrame implements ActionListener{
 	
 	public Menu() {
 		
+		//layouts
 		GridLayout outerGrid = new GridLayout(2, 1);
 		GridLayout grid = new GridLayout(5, 1);
-		GridLayout topGrid = new GridLayout(4, 1);
-		
+		GridLayout topGrid = new GridLayout(5, 1);		
 		frame.setLayout(outerGrid);
-	
-		topPanel.setBackground(Color.darkGray);
-		panel.setBackground(Color.darkGray);
-		title.setForeground(Color.orange);
-		title.setFont(new Font(title.getFont().getName(), Font.PLAIN, 24));
-		time.setForeground(Color.white);
-		date.setForeground(Color.white);
-		location.setForeground(Color.white);
-		
 		panel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 		panel.setLayout(grid);
 		topPanel.setLayout(topGrid);
 		topPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+	
+		//preferences
+		Color darkOrange = new Color(186, 104, 4);
+		frame.setBackground(Color.darkGray);
+		topPanel.setBackground(Color.darkGray);
+		panel.setBackground(Color.darkGray);
+		title.setForeground(darkOrange);
+		title.setFont(new Font(title.getFont().getName(), Font.PLAIN, 24));
+		menuLabel.setForeground(Color.orange);
+		menuLabel.setFont(new Font(title.getFont().getName(), Font.PLAIN, 16));
+		time.setForeground(Color.white);
+		date.setForeground(Color.white);
+		location.setForeground(Color.white);
+		frame.setPreferredSize(new Dimension(222, 350));
 		
+		//listeners
 		exitButton.addActionListener(exitListener);
 		interestButton.addActionListener(interestListener);
 		budgetButton.addActionListener(budgetListener);
 		currencyButton.addActionListener(currencyListener);
 		mortgageButton.addActionListener(mortgageListener);
 			
+		//adding to frame
 		topPanel.add(title);
+		topPanel.add(menuLabel);
 		topPanel.add(time);
 		topPanel.add(date);
 		topPanel.add(location);
@@ -76,13 +88,14 @@ public class Menu extends JFrame implements ActionListener{
 		panel.add(mortgageButton);
 		panel.add(exitButton);
 		
+		//running frame
 		frame.add(topPanel);
 		frame.add(panel);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Financial Toolkit");
 		frame.pack();
 		frame.setVisible(true);
-		frame.setResizable(true);
+		frame.setResizable(false);
 	}
 	
 	ActionListener exitListener = new ActionListener() {

@@ -108,7 +108,7 @@ public class BudgetManager extends JFrame implements ActionListener{
 		frame.setTitle("JFinance");
 		frame.pack();
 		frame.setVisible(true);
-		frame.setResizable(true);
+		frame.setResizable(false);
 	}
 	
 	FocusListener focusListener = new FocusListener() {
