@@ -22,6 +22,9 @@ import org.json.JSONObject;
 import org.w3c.dom.css.CSSPrimitiveValue;
 import org.w3c.dom.css.RGBColor;
 
+/**
+ * @author Jake Callcut
+ */
 
 public class Menu extends JFrame implements ActionListener{
 	
@@ -39,7 +42,7 @@ public class Menu extends JFrame implements ActionListener{
 	private static JButton interestButton = new JButton("Interest Calculator");
 	private static JButton budgetButton = new JButton("Budget Manager");
 	private static JButton currencyButton = new JButton("Currency Converter");
-	private static JButton mortgageButton = new JButton("Mortgage Calculator");
+	private static JButton stockButton = new JButton("Live Stock Prices");
 	private static JButton exitButton = new JButton("Exit");
 
 	
@@ -74,7 +77,7 @@ public class Menu extends JFrame implements ActionListener{
 		interestButton.addActionListener(interestListener);
 		budgetButton.addActionListener(budgetListener);
 		currencyButton.addActionListener(currencyListener);
-		mortgageButton.addActionListener(mortgageListener);
+		stockButton.addActionListener(stockListener);
 			
 		//adding to frame
 		topPanel.add(title);
@@ -85,7 +88,7 @@ public class Menu extends JFrame implements ActionListener{
 		panel.add(interestButton);
 		panel.add(budgetButton);
 		panel.add(currencyButton);
-		panel.add(mortgageButton);
+		panel.add(stockButton);
 		panel.add(exitButton);
 		
 		//running frame
@@ -130,11 +133,11 @@ public class Menu extends JFrame implements ActionListener{
 		}
 	};
 	
-	ActionListener mortgageListener = new ActionListener() {
+	ActionListener stockListener = new ActionListener() {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.exit(0);
+			new StockMenu();
 		}
 	};
 	
