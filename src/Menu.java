@@ -44,7 +44,6 @@ public class Menu extends JFrame implements ActionListener{
 	private static JButton currencyButton = new JButton("Currency Converter");
 	private static JButton stockButton = new JButton("Live Stock Prices");
 	private static JButton exitButton = new JButton("Exit");
-
 	
 	public Menu() {
 		
@@ -137,7 +136,12 @@ public class Menu extends JFrame implements ActionListener{
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			new StockMenu();
+			try {
+				new StockMenu();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	};
 	

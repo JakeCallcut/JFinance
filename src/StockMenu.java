@@ -3,7 +3,15 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Iterator;
 
 import javax.swing.JButton;
@@ -12,9 +20,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class StockMenu {
+import org.json.JSONObject;
 
-	private String apikey = "N3HAVJPBZH45MY3C";
+public class StockMenu extends JFrame implements ActionListener{
+
+	private static final long serialVersionUID = 1L;
+	private final static String apikey = "chshe89r01qr5oci0ukgchshe89r01qr5oci0ul0";
 	
 	private static JLabel[] categories = {new JLabel("Technology"), new JLabel("Real Estate"), new JLabel("Finance"), new JLabel("Pharmaceutical")};
 	private static JLabel[] tickers = 
@@ -38,10 +49,12 @@ public class StockMenu {
 	private static JPanel bottomPanel = new JPanel();
 	
 	private static JLabel title = new JLabel("Stock Prices");
+	private static JLabel status = new JLabel("Last Update: ");
 	private static JComboBox chooseTicker = new JComboBox();
 	private static JButton addButton = new JButton("Add ticker to main menu");
+	private static JButton updateButton = new JButton("Update Prices");
 	
-	public StockMenu() {
+	public StockMenu() throws IOException {
 		
 		//config
 		for (JLabel jLabel : tickers) {
@@ -50,6 +63,8 @@ public class StockMenu {
 		
 		//layouts
 		GridLayout tickerGrid = new GridLayout(11, 4);
+		tickerGrid.setHgap(20);
+		tickerGrid.setVgap(20);
 		FlowLayout outerLayout = new FlowLayout();
 		FlowLayout bottomLayout = new FlowLayout();
 		outPanel.setLayout(outerLayout);
@@ -65,6 +80,7 @@ public class StockMenu {
 		tickerPanel.setForeground(Color.white);
 		bottomPanel.setForeground(Color.white);
 		outPanel.setForeground(Color.white);
+		status.setForeground(darkOrange);
 		title.setForeground(Color.orange);
 		title.setFont(new Font(title.getFont().getName(), Font.PLAIN, 24));
 		
@@ -77,11 +93,15 @@ public class StockMenu {
 		frame.setPreferredSize(new Dimension(510, 310));
 		
 		//listeners
+		addButton.addActionListener(addListener);
+		updateButton.addActionListener(updateListener);
 		
 		//adding to frame
 		topPanel.add(title);
+		topPanel.add(status);
 		bottomPanel.add(chooseTicker);
 		bottomPanel.add(addButton);
+		bottomPanel.add(updateButton);
 		for (JLabel iLabel : categories) {
 			tickerPanel.add(iLabel);
 		}
@@ -100,11 +120,84 @@ public class StockMenu {
 		frame.pack();
 		frame.setVisible(true);
 		frame.setResizable(true);
+	}
+	
+	ActionListener addListener = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+		}
+	};
+	
+	ActionListener updateListener = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+				UpdateTickers();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	};
+	
+	public static void main(String[] args) throws IOException {
 		
 	}
 	
-	public static void main(String[] args) throws FileNotFoundException {
-	
+	public static void UpdateTickers() throws IOException {
+		String symbol;
+		String apiurl;
+		
+		for (JLabel jLabel : tickers) {
+			symbol = jLabel.getText();	
+			URL url;
+			
+			try {
+				url = new URL( "https://finnhub.io/api/v1/quote?symbol=" + symbol + "&token=" + apikey);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+       
+            JSONObject jsonResponse = new JSONObject(response.toString());     
+            System.out.println(jsonResponse);
+            double closePrice = jsonResponse.getDouble("c");
+            System.out.println(jsonResponse);
+            System.out.println(closePrice);
+            
+            jLabel.setText(symbol + " - " + closePrice);
+
+            connection.disconnect();
+			} catch (MalformedURLException e) {
+				System.out.println("Invalid URL");
+			}
+		}
 	}
-	
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }
+
+
+
+
+
+
+
+
+
+
+

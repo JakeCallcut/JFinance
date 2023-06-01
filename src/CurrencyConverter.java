@@ -25,6 +25,8 @@ import org.json.JSONObject;
 public class CurrencyConverter extends JFrame implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
+	private final String apikey = "e0cbabd4d96860dcf76e979b";
+	
 	private double beforeAmt;
 	private double afterAmt;
 	private double rate;
@@ -114,7 +116,7 @@ public class CurrencyConverter extends JFrame implements ActionListener{
 				double targetAmount;
 			
 				
-				URL url = new URL("https://v6.exchangerate-api.com/v6/e0cbabd4d96860dcf76e979b/latest/" + baseCurrency);
+				URL url = new URL("https://v6.exchangerate-api.com/v6/" + apikey + "/latest/" + baseCurrency);
 				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 				
 				connection.setRequestMethod("GET");
