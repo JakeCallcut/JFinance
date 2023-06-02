@@ -6,13 +6,12 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Iterator;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -26,6 +25,8 @@ public class StockMenu extends JFrame implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
 	private final static String apikey = "chshe89r01qr5oci0ukgchshe89r01qr5oci0ul0";
+	private static String lastChecked;
+	private static double lastCheckedUnix;
 	
 	private static JLabel[] categories = {new JLabel("Technology"), new JLabel("Real Estate"), new JLabel("Finance"), new JLabel("Pharmaceutical")};
 	private static JLabel[] tickers = 
@@ -42,6 +43,20 @@ public class StockMenu extends JFrame implements ActionListener{
 			, new JLabel("ORCL"), new JLabel("DLR"), new JLabel("AXP"), new JLabel("SNY")
 		};
 	
+	private static String[] symbols = 
+		{
+				  "AAPL", "PLD", "V", "LLY"  
+				  , "MSFT", "AMT", "JPM", "JNJ"
+				  , "GOOG", "EQIX","MA", "NVO"
+				  , "AMZN", "PSA", "BAC", "MRK"
+				  , "NVDA", "CCI", "WFC", "ABBV"
+				  , "META", "SPG", "MS", "AZN"
+				  , "TSLA", "WELL","RY", "PFE"
+				  , "AMD", "CSGP", "SPGI","NVS"
+				  , "BABA", "VICI","HDB", "BMY"
+				  , "ORCL", "DLR", "AXP", "SNY"
+		};
+	
 	private static JFrame frame = new JFrame();
 	private static JPanel outPanel = new JPanel();
 	private static JPanel topPanel = new JPanel();
@@ -54,7 +69,7 @@ public class StockMenu extends JFrame implements ActionListener{
 	private static JButton addButton = new JButton("Add ticker to main menu");
 	private static JButton updateButton = new JButton("Update Prices");
 	
-	public StockMenu() throws IOException {
+	public StockMenu() {
 		
 		//config
 		for (JLabel jLabel : tickers) {
@@ -134,54 +149,70 @@ public class StockMenu extends JFrame implements ActionListener{
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			try {
+				status.setText("Updating Prices...");
 				UpdateTickers();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
 			}
-		}
 	};
 	
-	public static void main(String[] args) throws IOException {
-		
-	}
-	
-	public static void UpdateTickers() throws IOException {
+	public static void UpdateTickers(){
 		String symbol;
 		String apiurl;
+		int index = 0;
 		
 		for (JLabel jLabel : tickers) {
-			symbol = jLabel.getText();	
+			symbol = symbols[index];	
 			URL url;
 			
 			try {
 				url = new URL( "https://finnhub.io/api/v1/quote?symbol=" + symbol + "&token=" + apikey);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
+	            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+	            connection.setRequestMethod("GET");
+	            
+	            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	            String inputLine;
+	            StringBuilder response = new StringBuilder();
+	
+	            while ((inputLine = in.readLine()) != null) {
+	                response.append(inputLine);
+	            }
+	            in.close();
+	       
+	            JSONObject jsonResponse = new JSONObject(response.toString());     
+	            System.out.println(jsonResponse);
+	            double change = jsonResponse.getDouble("d");
+	            double closePrice = jsonResponse.getDouble("c");
+	            lastCheckedUnix = jsonResponse.getDouble("t");
+	            
+	
+	            if (change > 0) {
+					jLabel.setForeground(Color.green);
+					jLabel.setText(symbol + " - " + closePrice + " ꜛ " + Math.abs(change));
+				}
+	            else if (change < 0) {
+		            	jLabel.setForeground(Color.red);					
+		            	jLabel.setText(symbol + " - " + closePrice + " ꜜ " + Math.abs(change));
+				}
+	            else {					
+	            		jLabel.setForeground(Color.orange);
+	            		jLabel.setText(symbol + " - " + closePrice);
+				}
+	            
+	            connection.disconnect();
             
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-       
-            JSONObject jsonResponse = new JSONObject(response.toString());     
-            System.out.println(jsonResponse);
-            double closePrice = jsonResponse.getDouble("c");
-            System.out.println(jsonResponse);
-            System.out.println(closePrice);
-            
-            jLabel.setText(symbol + " - " + closePrice);
-
-            connection.disconnect();
-			} catch (MalformedURLException e) {
+			} 
+			catch (MalformedURLException e) {
 				System.out.println("Invalid URL");
 			}
+			catch (IOException e) {
+				status.setText("Updated prices not currently availible, try again shortly");
+			}
+			
+			index++;
 		}
+		
+		Date time = new Date((long)lastCheckedUnix*1000);
+		lastChecked = time.toLocaleString();
+		status.setText("Last Updated: " + lastChecked);
 	}
 
 	@Override

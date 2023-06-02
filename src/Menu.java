@@ -49,7 +49,7 @@ public class Menu extends JFrame implements ActionListener{
 		
 		//layouts
 		GridLayout outerGrid = new GridLayout(2, 1);
-		GridLayout grid = new GridLayout(5, 1);
+		GridLayout grid = new GridLayout(5, 1); 
 		GridLayout topGrid = new GridLayout(5, 1);		
 		frame.setLayout(outerGrid);
 		panel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
@@ -136,12 +136,7 @@ public class Menu extends JFrame implements ActionListener{
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			try {
 				new StockMenu();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 		}
 	};
 	
