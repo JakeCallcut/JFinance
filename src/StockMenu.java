@@ -6,6 +6,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -24,7 +26,7 @@ import org.json.JSONObject;
 public class StockMenu extends JFrame implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
-	private final static String apikey = "chshe89r01qr5oci0ukgchshe89r01qr5oci0ul0";
+	public final static String apikey = "chssle1r01qr5oci5le0chssle1r01qr5oci5leg";
 	private static String lastChecked;
 	private static double lastCheckedUnix;
 	
@@ -105,7 +107,7 @@ public class StockMenu extends JFrame implements ActionListener{
 		for (JLabel jLabel : tickers) {
 			jLabel.setForeground(Color.white);
 		}
-		frame.setPreferredSize(new Dimension(510, 310));
+		frame.setPreferredSize(new Dimension(730, 530));
 		
 		//listeners
 		addButton.addActionListener(addListener);
@@ -135,6 +137,7 @@ public class StockMenu extends JFrame implements ActionListener{
 		frame.pack();
 		frame.setVisible(true);
 		frame.setResizable(true);
+		UpdateTickers();
 	}
 	
 	ActionListener addListener = new ActionListener() {
@@ -142,6 +145,16 @@ public class StockMenu extends JFrame implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
+			String symbol = (String)chooseTicker.getSelectedItem();
+			
+	        try (BufferedWriter writer = new BufferedWriter(new FileWriter("watchlist.txt"))) {
+	        	writer.write(symbol);
+	        } catch (IOException e1) {
+	            e1.printStackTrace();
+	        }
+	        chooseTicker.setForeground(Color.green);
+	        Menu.UpdateMenu();
+	        chooseTicker.setForeground(Color.black);
 		}
 	};
 	
