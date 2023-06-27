@@ -1,7 +1,9 @@
 <p align="center">
+	<img src="https://github.com/JakeCallcut/JFinance/blob/main/Screenshots/mainMenu.png"  style="margin-right:-5px">
+	<img src="https://github.com/JakeCallcut/JFinance/blob/main/Screenshots/StockMenu.png"  style="margin-right:-5px"><br>
 	<img src="https://img.shields.io/badge/Framework-Swing-ff69b4"  style="margin-right:-5px">
     <img src="https://img.shields.io/badge/Language-Java-orange"  style="margin-right:-5px"><br>
-    </p>
+</p>
 
 # 📈JFinance
 Jfinance is a compact financial toolkit for convenient desktop use designed for the everyday person to manage budgets and conduct financial calculations
