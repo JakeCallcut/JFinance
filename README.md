@@ -1,5 +1,5 @@
 <p align="center">
-	<img src="https://github.com/JakeCallcut/JFinance/blob/main/Screenshots/mainMenu.png"  style="margin-right:-5px">
+	<img src="https://github.com/JakeCallcut/JFinance/blob/main/Screenshots/mainMenu.png"   width="150" style="margin-right:-5px">
 	<img src="https://github.com/JakeCallcut/JFinance/blob/main/Screenshots/StockMenu.png"  style="margin-right:-5px"><br>
 	<img src="https://img.shields.io/badge/Framework-Swing-ff69b4"  style="margin-right:-5px">
     <img src="https://img.shields.io/badge/Language-Java-orange"  style="margin-right:-5px"><br>
